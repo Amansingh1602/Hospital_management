@@ -5,17 +5,23 @@ import dotenv from "dotenv";
 // Load environment variables
 dotenv.config({ path: "./config.env" });
 
-// Admin credentials
+// Admin credentials from environment variables
 const adminData = {
-  firstName: "Admin",
-  lastName: "User",
-  email: "admin@hospital.com",
-  phone: "0300000000",
-  dob: "1990-01-01",
-  gender: "Male",
-  password: "admin123",
+  firstName: process.env.ADMIN_FIRST_NAME || "Admin",
+  lastName: process.env.ADMIN_LAST_NAME || "User",
+  email: process.env.ADMIN_EMAIL,
+  phone: process.env.ADMIN_PHONE || "0000000000",
+  dob: process.env.ADMIN_DOB || "1990-01-01",
+  gender: process.env.ADMIN_GENDER || "Male",
+  password: process.env.ADMIN_PASSWORD,
   role: "Admin"
 };
+
+// Validate required environment variables
+if (!adminData.email || !adminData.password) {
+  console.error("❌ Error: ADMIN_EMAIL and ADMIN_PASSWORD must be set in config.env");
+  process.exit(1);
+}
 
 const createAdmin = async () => {
   try {
@@ -32,7 +38,7 @@ const createAdmin = async () => {
       console.log("\nAdmin Credentials:");
       console.log("==================");
       console.log("Email:", adminData.email);
-      console.log("Password: admin123");
+      console.log("Password: [set in config.env]");
       console.log("Role: Admin");
       process.exit(0);
     }
@@ -44,7 +50,7 @@ const createAdmin = async () => {
     console.log("\nAdmin Credentials:");
     console.log("==================");
     console.log("Email:", adminData.email);
-    console.log("Password: admin123");
+    console.log("Password: [as set in config.env]");
     console.log("Role: Admin");
     console.log("\nYou can now login to the dashboard at:");
     console.log("http://localhost:5174");
